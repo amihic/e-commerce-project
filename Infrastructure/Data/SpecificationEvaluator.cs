@@ -19,6 +19,23 @@ namespace Infrastructure.Data
             {
                 query = query.Where(spec.Criteria);// p => p.ProductTypeId == id
             }
+
+            if (spec.OrderBy != null)
+            {
+                query = query.OrderBy(spec.OrderBy);
+            }
+
+            if (spec.OrderByDescending != null)
+            {
+                query = query.OrderByDescending(spec.OrderByDescending);
+            }
+
+            //if statementses order is important
+            if (spec.isPagingEnabled)
+            {
+                query = query.Skip(spec.Skip).Take(spec.Take);
+            }
+
             //for including data to object that shows null for some fields 
             query = spec.Includes.Aggregate(query, (current, include) => current.Include(include));
 
